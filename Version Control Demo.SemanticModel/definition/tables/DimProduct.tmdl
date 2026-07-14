@@ -1,0 +1,41 @@
+table DimProduct
+	lineageTag: 5990eebb-81a5-4203-8083-d541121fce44
+
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: 0926642e-8eb6-4264-84f6-0c5cd32bc28d
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductName
+		dataType: string
+		lineageTag: 57806c44-bd10-401b-865d-2c9d5b2e7d9d
+		summarizeBy: none
+		sourceColumn: ProductName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 7af74430-0fbd-42d6-b028-e394c87b6f6e
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimProduct = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\sanoj.m\Documents\TMDL Discussion\PowerBI_Dataset_Large.xlsx"), null, true),
+				    DimProduct_Sheet = Source{[Item="DimProduct",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(DimProduct_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"ProductID", Int64.Type}, {"ProductName", type text}, {"Category", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

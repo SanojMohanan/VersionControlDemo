@@ -1,0 +1,41 @@
+table DimCustomer
+	lineageTag: 49df39b7-1a5f-4916-a0b6-960b273a3185
+
+	column CustomerID
+		dataType: int64
+		formatString: 0
+		lineageTag: eaef39f2-e642-4691-a49b-a95e50a85446
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerName
+		dataType: string
+		lineageTag: bd0f1d9d-0bde-4af1-855c-ffeaf738cda8
+		summarizeBy: none
+		sourceColumn: CustomerName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Segment
+		dataType: string
+		lineageTag: d6a81556-5df6-4189-a2a5-bda683f3a52d
+		summarizeBy: none
+		sourceColumn: Segment
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimCustomer = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\sanoj.m\Documents\TMDL Discussion\PowerBI_Dataset_Large.xlsx"), null, true),
+				    DimCustomer_Sheet = Source{[Item="DimCustomer",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(DimCustomer_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"CustomerID", Int64.Type}, {"CustomerName", type text}, {"Segment", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

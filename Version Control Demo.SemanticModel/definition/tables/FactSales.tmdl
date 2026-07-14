@@ -1,0 +1,158 @@
+table FactSales
+	lineageTag: 8ec37507-4363-4b4f-a360-9ff7798cf24d
+
+	measure 'Total Sales' = SUM(FactSales[SalesAmount])
+		formatString: 0
+		lineageTag: 290647d8-ca6a-4cfc-aef9-04fc7188cb5b
+
+	measure 'Total Quantity' = SUM(FactSales[Quantity])
+		formatString: 0
+		lineageTag: 76510c0b-28fb-48ef-af7c-b4aab6da0ee5
+
+	measure 'Total Orders' = ```
+			COUNT(FactSales[SalesID])
+			
+			```
+		formatString: 0
+		lineageTag: 5cee0307-048f-4a17-97a5-bdff3b09582b
+
+	measure 'Average Sales per Order' = ```
+			
+			DIVIDE([Total Sales], [Total Orders])
+			
+			```
+		lineageTag: e65d1ac8-810b-4563-ac18-2f8e49be52f9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Sales per Quantity' = ```
+			
+			DIVIDE([Total Sales], [Total Quantity])
+			
+			```
+		lineageTag: 2281c005-b4f2-413c-8a9a-be2804d49a9f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Sales Contribution %' = ```
+			
+			DIVIDE(
+			    [Total Sales],
+			    CALCULATE([Total Sales], ALL(DimProduct))
+			)
+			
+			```
+		lineageTag: fc52a7d8-91ac-4de8-8c7d-d15501989257
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure SalesNew = SUM(FactSales[SalesAmount])
+		lineageTag: 6bcdb0d8-5590-4a4f-8f31-a580d307ffe7
+
+	measure 1 = Sum(FactSales[CountryID])
+		formatString: 0
+		displayFolder: MeasuresFolder
+		lineageTag: 9cf1bbd4-24ce-4594-b2e6-fccf7304f5af
+
+	measure 2 = Sum(FactSales[CustomerID])
+		formatString: 0
+		displayFolder: MeasuresFolder
+		lineageTag: c11fd6df-a878-42e9-a325-e289bfad304e
+
+	measure 3 = Sum(FactSales[OrderID])
+		formatString: 0
+		displayFolder: MeasuresFolder
+		lineageTag: ee22bfb0-07a6-407c-b35e-88ae1f713962
+
+	measure 4 = Sum(FactSales[ProductID])
+		formatString: 0
+		displayFolder: MeasuresFolder
+		lineageTag: 9ba5d598-bd5f-4ed6-9e28-196883a4b75c
+
+	column SalesID
+		dataType: int64
+		formatString: 0
+		lineageTag: 53a0ea56-f04a-4340-9ba4-b1ee60e923ea
+		summarizeBy: count
+		sourceColumn: SalesID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CountryID
+		dataType: int64
+		formatString: 0
+		lineageTag: cdb31c6f-497e-4910-91c6-53d7f4e31c57
+		summarizeBy: none
+		sourceColumn: CountryID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: 27f76c2a-1dcb-40f7-b805-63af1a8eb46f
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerID
+		dataType: int64
+		formatString: 0
+		lineageTag: 347a8c31-5fd9-4d29-bdc4-e74b9ba54e31
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateID
+		dataType: int64
+		formatString: 0
+		lineageTag: 49064c29-83e9-468c-8bee-0a6deaf02dd3
+		summarizeBy: none
+		sourceColumn: DateID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesAmount
+		dataType: int64
+		formatString: 0
+		lineageTag: 0c5de699-a0bd-473d-a976-c3912d03f71b
+		summarizeBy: sum
+		sourceColumn: SalesAmount
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: a451d498-f167-4a8d-be13-48bdc63ed370
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderID
+		dataType: int64
+		formatString: 0
+		lineageTag: a4610d49-4386-401b-9145-343f27dac1fb
+		summarizeBy: count
+		sourceColumn: OrderID
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactSales = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\sanoj.m\Documents\TMDL Discussion\PowerBI_Dataset_Large.xlsx"), null, true),
+				    FactSales_Sheet = Source{[Item="FactSales",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(FactSales_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"SalesID", Int64.Type}, {"CountryID", Int64.Type}, {"ProductID", Int64.Type}, {"CustomerID", Int64.Type}, {"DateID", Int64.Type}, {"SalesAmount", Int64.Type}, {"Quantity", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

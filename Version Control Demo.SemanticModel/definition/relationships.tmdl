@@ -1,0 +1,22 @@
+relationship AutoDetected_68e4a3d4-45e3-4bdf-a5c5-fc8e981b7929
+	fromColumn: FactSales.CountryID
+	toColumn: DimCountry.CountryID
+
+relationship AutoDetected_3ba3aa7a-9795-4add-a0b4-4caf58f33866
+	fromColumn: FactSales.CustomerID
+	toColumn: DimCustomer.CustomerID
+
+relationship AutoDetected_c0dfd3e5-5256-41c2-870b-192646a23b14
+	fromColumn: FactSales.DateID
+	toColumn: DimDate.DateID
+
+relationship AutoDetected_05d968a7-9121-416b-9442-8935d9f93423
+	fromColumn: FactSales.ProductID
+	toColumn: DimProduct.ProductID
+
+relationship c4dbd406-a0b8-feab-9e22-f9b215b3aeec
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: DimDate.Date
+	toColumn: Orders.OrderDate
+

@@ -1,0 +1,58 @@
+table Orders
+	lineageTag: 3820cff0-88f1-4606-8cb8-a7d471c6408d
+
+	column OrderID
+		dataType: int64
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: f4cde9aa-369d-4c04-8120-99ad7d0e3bd4
+		summarizeBy: count
+		sourceColumn: OrderID
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderDate
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: 7365ad31-61ee-4bec-8d65-954064629a2c
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column CustomerName
+		dataType: string
+		sourceProviderType: nvarchar(100)
+		lineageTag: c6026e68-47fe-4a63-81c0-82645d025d38
+		summarizeBy: none
+		sourceColumn: CustomerName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Amount
+		dataType: double
+		sourceProviderType: decimal(10, 2)
+		lineageTag: df897189-c5f4-4615-9e63-27d05fd7240f
+		summarizeBy: sum
+		sourceColumn: Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Orders = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Databases("SANOJM"),
+				    Test = Source{[Name="Test"]}[Data],
+				    dbo_Orders = Test{[Schema="dbo",Item="Orders1"]}[Data]
+				in
+				    dbo_Orders
+
+	annotation PBI_ResultType = Exception
+
