@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "TMDL Discussion"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "8fb2d79e-5515-4e86-a0f0-34cb3947ae91"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "TMDL Discussion"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "99776555-087b-4a26-a220-71f7b105be26"
+  }
+}
